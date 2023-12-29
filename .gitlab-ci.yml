@@ -22,6 +22,7 @@ cypress-run:
     - echo "STORE_PATH=$(pnpm store path --silent)" >> $CI_ENVIRONMENT_SLUG
     - pnpm install
     - pnpm build
+    - pnpm start
     - xvfb-run pnpm cypress run
   cache:
     paths:
