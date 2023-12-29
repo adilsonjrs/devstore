@@ -7,6 +7,7 @@ variables:
   NODE_VERSION: "20"
   APP_URL: "http://localhost:3000"
   NEXT_PUBLIC_API_BASE_URL: "https://ignite-devstore-api.vercel.app"
+  CI_ENVIRONMENT_SLUG: "review-$CI_COMMIT_REF_SLUG"
 
 cypress-run:
   image: ubuntu:22.04
@@ -17,7 +18,7 @@ cypress-run:
     - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
     - apt-get install -y nodejs
     - npm install -g pnpm
-    - echo "STORE_PATH=$(pnpm store path --silent)" >> $CI_ENVIRONMENT_NAME
+    - echo "STORE_PATH=$(pnpm store path --silent)" >> $CI_ENVIRONMENT_SLUG
     - pnpm install
     - pnpm build
     - pnpm start &
@@ -27,5 +28,5 @@ cypress-run:
       - $STORE_PATH
     key: $CACHE_RESTORE_KEY
   environment:
-    name: review/$CI_COMMIT_REF_SLUG
+    name: $CI_ENVIRONMENT_SLUG
     url: $CI_PROJECT_URL/-/environments/$CI_ENVIRONMENT_SLUG
