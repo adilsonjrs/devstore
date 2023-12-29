@@ -1,14 +1,3 @@
-stages:
-  - test
-
-variables:
-  STORE_PATH: ""
-  CACHE_RESTORE_KEY: $CI_RUNNER_ID-pnpm-store-${CI_COMMIT_REF_SLUG}
-  NODE_VERSION: "20"
-  APP_URL: "http://localhost:3000"
-  NEXT_PUBLIC_API_BASE_URL: "https://ignite-devstore-api.vercel.app"
-  CI_ENVIRONMENT_SLUG: "review-$CI_COMMIT_REF_SLUG"
-
 cypress-run:
   image: ubuntu:22.04
   stage: test
@@ -18,11 +7,11 @@ cypress-run:
     - curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
     - apt-get install -y nodejs
     - npm install -g pnpm
+    - apt-get install -y xvfb
     - echo "STORE_PATH=$(pnpm store path --silent)" >> $CI_ENVIRONMENT_SLUG
     - pnpm install
     - pnpm build
-    - pnpm start &
-    - pnpm cypress run
+    - xvfb-run pnpm cypress run
   cache:
     paths:
       - $STORE_PATH
